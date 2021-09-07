@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { TezosToolkit } from "@taquito/taquito";
+//  the TezosToolkit which contains the functionality of the Taquito library
 import "./App.css";
 import ConnectButton from "./components/ConnectWallet";
+//,handle connecting to the user's wallet and reading out the state we need
 import DisconnectButton from "./components/DisconnectWallet";
 import qrcode from "qrcode-generator";
 import UpdateContract from "./components/UpdateContract";
+// UpdateContract will handle the user’s interactions with the contract
 import Transfers from "./components/Transfers";
+import DisconnectedUser from "./components/DisconnectedUser";
+// Transfers will handle the functionality of making a transaction.
 
 enum BeaconConnection {
   NONE = "",
@@ -31,6 +36,7 @@ const App = () => {
 
   // Granadanet Increment/Decrement contract
   const contractAddress: string = "KT1K3XVNzsmur7VRgY8CAHPUENaErzzEpe4e";
+  // KT1DwohtXfDWRVVMKj968c2FsmxCvTsMLMdR
 
   const generateQrCode = (): { __html: string } => {
     const qr = qrcode(0, "L");
@@ -39,6 +45,15 @@ const App = () => {
 
     return { __html: qr.createImgTag(4) };
   };
+  //console.log({contract})
+  //console.log({wallet})
+  //console.log({userAddress})
+  //console.log({userBalance})
+  //console.log({storage})
+  //console.log({copiedPublicToken})
+  //console.log({beaconConnection})
+  //console.log({activeTab})
+  //console.log({publicToken})
 
   if (publicToken && (!userAddress || isNaN(userBalance))) {
     return (
@@ -84,15 +99,13 @@ const App = () => {
             </p>
           </div>
         </div>
-        <div id="footer">
-          <img src="built-with-taquito.png" alt="Built with Taquito" />
-        </div>
+
       </div>
     );
   } else if (userAddress && !isNaN(userBalance)) {
     return (
       <div className="main-box">
-        <h1>Taquito Boilerplate</h1>
+        <h1>Taquito Boilerplat</h1>
         <div id="tabs">
           <div
             id="transfer"
@@ -123,7 +136,7 @@ const App = () => {
             ) : (
               <div id="increment-decrement">
                 <h3 className="text-align-center">
-                  Current counter: <span>{storage}</span>
+                  Current counter: <span>storage : {storage}</span>
                 </h3>
                 <UpdateContract
                   contract={contract}
@@ -162,60 +175,22 @@ const App = () => {
             setBeaconConnection={setBeaconConnection}
           />
         </div>
-        <div id="footer">
-          <img src="built-with-taquito.png" alt="Built with Taquito" />
-        </div>
       </div>
     );
   } else if (!publicToken && !userAddress && !userBalance) {
+    // disconnected
     return (
-      <div className="main-box">
-        <div className="title">
-          <h1>Taquito Boilerplate</h1>
-          <a href="https://app.netlify.com/start/deploy?repository=https://github.com/ecadlabs/taquito-boilerplate">
-            <img
-              src="https://www.netlify.com/img/deploy/button.svg"
-              alt="netlify-button"
-            />
-          </a>
-        </div>
-        <div id="dialog">
-          <header>Welcome to Taquito Boilerplate App!</header>
-          <div id="content">
-            <p>Hello!</p>
-            <p>
-              This is a template Tezos dApp built using Taquito. It's a starting
-              point for you to hack on and build your own dApp for Tezos.
-              <br />
-              If you have not done so already, go to the{" "}
-              <a
-                href="https://github.com/ecadlabs/taquito-boilerplate"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Taquito boilerplate Github page
-              </a>{" "}
-              and click the <em>"Use this template"</em> button.
-            </p>
-            <p>Go forth and Tezos!</p>
-          </div>
-          <ConnectButton
-            Tezos={Tezos}
-            setContract={setContract}
-            setPublicToken={setPublicToken}
-            setWallet={setWallet}
-            setUserAddress={setUserAddress}
-            setUserBalance={setUserBalance}
-            setStorage={setStorage}
-            contractAddress={contractAddress}
-            setBeaconConnection={setBeaconConnection}
-            wallet={wallet}
-          />
-        </div>
-        <div id="footer">
-          <img src="built-with-taquito.png" alt="Built with Taquito" />
-        </div>
-      </div>
+      <DisconnectedUser 
+      Tezos={Tezos}
+      setContract={setContract}
+      setPublicToken={setPublicToken}
+      setWallet={setWallet}
+      setUserAddress={setUserAddress}
+      setUserBalance={setUserBalance}
+      setStorage={setStorage}
+      contractAddress={contractAddress}
+      setBeaconConnection={setBeaconConnection}
+      wallet={wallet} />
     );
   } else {
     return <div>An error has occurred</div>;
