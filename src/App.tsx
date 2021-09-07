@@ -10,6 +10,7 @@ import UpdateContract from "./components/UpdateContract";
 // UpdateContract will handle the user’s interactions with the contract
 import Transfers from "./components/Transfers";
 import DisconnectedUser from "./components/DisconnectedUser";
+import Nav from "./components/common/Nav";
 // Transfers will handle the functionality of making a transaction.
 
 enum BeaconConnection {
@@ -180,6 +181,8 @@ const App = () => {
   } else if (!publicToken && !userAddress && !userBalance) {
     // disconnected
     return (
+      <>
+      <Nav />
       <DisconnectedUser 
       Tezos={Tezos}
       setContract={setContract}
@@ -191,7 +194,9 @@ const App = () => {
       contractAddress={contractAddress}
       setBeaconConnection={setBeaconConnection}
       wallet={wallet} />
-    );
+      </>
+    )
+    
   } else {
     return <div>An error has occurred</div>;
   }

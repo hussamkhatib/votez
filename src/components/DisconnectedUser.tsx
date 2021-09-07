@@ -33,12 +33,7 @@ const DisconnectedUser = ({
         <div className="main-box">
         <div className="title">
           <h1>Taquito Boilerplate</h1>
-          <a href="https://app.netlify.com/start/deploy?repository=https://github.com/ecadlabs/taquito-boilerplate">
-            <img
-              src="https://www.netlify.com/img/deploy/button.svg"
-              alt="netlify-button"
-            />
-          </a>
+ 
         </div>
         <div id="dialog">
           <header>Welcome to Taquito Boilerplate App!</header>
