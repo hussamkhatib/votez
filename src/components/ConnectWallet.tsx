@@ -6,8 +6,6 @@ import {
   BeaconEvent,
   defaultEventCallbacks
 } from "@airgap/beacon-sdk";
-import TransportU2F from "@ledgerhq/hw-transport-u2f";
-import { LedgerSigner } from "@taquito/ledger-signer";
 
 type ButtonProps = {
   Tezos: TezosToolkit;
@@ -15,7 +13,7 @@ type ButtonProps = {
   setWallet: Dispatch<SetStateAction<any>>;
   setUserAddress: Dispatch<SetStateAction<string>>;
   setUserBalance: Dispatch<SetStateAction<number>>;
-  setStorage: Dispatch<SetStateAction<number>>;
+  setStorage: Dispatch<SetStateAction<any>>;
   contractAddress: string;
   setBeaconConnection: Dispatch<SetStateAction<boolean>>;
   setPublicToken: Dispatch<SetStateAction<string | null>>;
@@ -45,7 +43,10 @@ const ConnectButton = ({
     const contract = await Tezos.wallet.at(contractAddress);
     const storage: any = await contract.storage();
     setContract(contract);
-    setStorage(storage.toNumber());
+    console.log(storage)
+    setStorage(storage);
+    //setStorage(storage.toNumber());
+
   };
 
   const connectWallet = async (): Promise<void> => {
@@ -65,22 +66,6 @@ const ConnectButton = ({
     }
   };
 
-  const connectNano = async (): Promise<void> => {
-    try {
-      setLoadingNano(true);
-      const transport = await TransportU2F.create();
-      const ledgerSigner = new LedgerSigner(transport, "44'/1729'/0'/0'", true);
-
-      Tezos.setSignerProvider(ledgerSigner);
-
-      //Get the public key and the public key hash from the Ledger
-      const userAddress = await Tezos.signer.publicKeyHash();
-      await setup(userAddress);
-    } catch (error) {
-      console.log("Error!", error);
-      setLoadingNano(false);
-    }
-  };
 
   useEffect(() => {
     (async () => {
@@ -115,20 +100,8 @@ const ConnectButton = ({
     <div className="buttons">
       <button className="button" onClick={connectWallet}>
         <span>
-          <i className="fas fa-wallet"></i>&nbsp; Connect with wallet
+          <i className="fas fa-wallet"></i> Connect with wallet
         </span>
-      </button>
-      <button className="button" disabled={loadingNano} onClick={connectNano}>
-        {loadingNano ? (
-          <span>
-            <i className="fas fa-spinner fa-spin"></i>&nbsp; Loading, please
-            wait
-          </span>
-        ) : (
-          <span>
-            <i className="fab fa-usb"></i>&nbsp; Connect with Ledger Nano
-          </span>
-        )}
       </button>
     </div>
   );

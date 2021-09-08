@@ -36,8 +36,8 @@ const App = () => {
   const [activeTab, setActiveTab] = useState<string>("transfer");
 
   // Granadanet Increment/Decrement contract
-  const contractAddress: string = "KT1K3XVNzsmur7VRgY8CAHPUENaErzzEpe4e";
-  // KT1DwohtXfDWRVVMKj968c2FsmxCvTsMLMdR
+  const contractAddress: string = "KT1X9o1MAVFDEiiz2AycaAQFKFSBAxwp17Ru";
+
 
   const generateQrCode = (): { __html: string } => {
     const qr = qrcode(0, "L");
@@ -105,51 +105,24 @@ const App = () => {
     );
   } else if (userAddress && !isNaN(userBalance)) {
     return (
+      <>
+      <Nav>
+      <DisconnectButton
+            wallet={wallet}
+            setPublicToken={setPublicToken}
+            setUserAddress={setUserAddress}
+            setUserBalance={setUserBalance}
+            setWallet={setWallet}
+            setTezos={setTezos}
+            setBeaconConnection={setBeaconConnection}
+          />
+      </Nav>
+      storage : {JSON.stringify(storage,null,2)}
       <div className="main-box">
-        <h1>Taquito Boilerplat</h1>
         <div id="tabs">
-          <div
-            id="transfer"
-            className={activeTab === "transfer" ? "active" : ""}
-            onClick={() => setActiveTab("transfer")}
-          >
-            Make a transfer
-          </div>
-          <div
-            id="contract"
-            className={activeTab === "contract" ? "active" : ""}
-            onClick={() => setActiveTab("contract")}
-          >
-            Interact with a contract
-          </div>
         </div>
-        <div id="dialog">
-          <div id="content">
-            {activeTab === "transfer" ? (
-              <div id="transfers">
-                <h3 className="text-align-center">Make a transfer</h3>
-                <Transfers
-                  Tezos={Tezos}
-                  setUserBalance={setUserBalance}
-                  userAddress={userAddress}
-                />
-              </div>
-            ) : (
-              <div id="increment-decrement">
-                <h3 className="text-align-center">
-                  Current counter: <span>storage : {storage}</span>
-                </h3>
-                <UpdateContract
-                  contract={contract}
-                  setUserBalance={setUserBalance}
-                  Tezos={Tezos}
-                  userAddress={userAddress}
-                  setStorage={setStorage}
-                />
-              </div>
-            )}
             <p>
-              <i className="far fa-file-code"></i>&nbsp;
+            contract address
               <a
                 href={`https://better-call.dev/granadanet/${contractAddress}/operations`}
                 target="_blank"
@@ -159,41 +132,33 @@ const App = () => {
               </a>
             </p>
             <p>
-              <i className="far fa-address-card"></i>&nbsp; {userAddress}
+              userAddress {userAddress}
             </p>
             <p>
-              <i className="fas fa-piggy-bank"></i>&nbsp;
-              {(userBalance / 1000000).toLocaleString("en-US")} ꜩ
+              balance : {(userBalance / 1000000).toLocaleString("en-US")} ꜩ
             </p>
           </div>
-          <DisconnectButton
-            wallet={wallet}
-            setPublicToken={setPublicToken}
-            setUserAddress={setUserAddress}
-            setUserBalance={setUserBalance}
-            setWallet={setWallet}
-            setTezos={setTezos}
-            setBeaconConnection={setBeaconConnection}
-          />
-        </div>
-      </div>
-    );
+      </>
+    )
   } else if (!publicToken && !userAddress && !userBalance) {
     // disconnected
     return (
       <>
-      <Nav />
-      <DisconnectedUser 
-      Tezos={Tezos}
-      setContract={setContract}
-      setPublicToken={setPublicToken}
-      setWallet={setWallet}
-      setUserAddress={setUserAddress}
-      setUserBalance={setUserBalance}
-      setStorage={setStorage}
-      contractAddress={contractAddress}
-      setBeaconConnection={setBeaconConnection}
-      wallet={wallet} />
+      <Nav>
+      <ConnectButton
+            Tezos={Tezos}
+            setContract={setContract}
+            setPublicToken={setPublicToken}
+            setWallet={setWallet}
+            setUserAddress={setUserAddress}
+            setUserBalance={setUserBalance}
+            setStorage={setStorage}
+            contractAddress={contractAddress}
+            setBeaconConnection={setBeaconConnection}
+            wallet={wallet}
+          />
+        </Nav>
+
       </>
     )
     
